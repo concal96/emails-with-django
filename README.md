@@ -1,0 +1,1 @@
+A web app that sends an email from the developer to the entered email address.

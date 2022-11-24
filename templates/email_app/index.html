@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+{% extends "email_app/base.html" %}
+{% block body_block %}
+<title>Hello!</title>
+</head>
+<body>
+    <div class="card" style="">
+        <div class="card-body">
+          <h5 class="card-title">Welcome To My Python and Django Project!</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Enter your email below and you will receive an email from me automated through Django!</h6>
+          <form action="" method="POST">
+            {{form.as_p}}
+            {% csrf_token %}
+            <input type="submit" class="btn btn-primary" value="Submit">
+        </form>
+        </div>
+      </div>
+{% endblock %}

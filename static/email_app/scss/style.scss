@@ -1,0 +1,11 @@
+@use 'custom';
+
+//import components
+@use 'components/animations';
+@use 'components/buttons';
+@use 'components/mixins';
+@use 'components/typography';
+
+//import sections
+@use 'sections/intro-section';
+@use 'sections/email-form';

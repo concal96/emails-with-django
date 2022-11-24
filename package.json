@@ -1,0 +1,32 @@
+{
+  "name": "email_app",
+  "version": "1.0.0",
+  "description": "front end for email project",
+  "main": "index.js",
+  "scripts": {
+    "compile:sass": "sass --watch scss:assets/css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/concal96/SendEmail_DjangoApp.git"
+  },
+  "keywords": [
+    "sass",
+    "bootstrap"
+  ],
+  "author": "Connor Callaghan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/concal96/SendEmail_DjangoApp/issues"
+  },
+  "homepage": "https://github.com/concal96/SendEmail_DjangoApp#readme",
+  "devDependencies": {
+    "sass": "^1.56.1"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.2.1",
+    "autoprefixer": "^10.4.13",
+    "bootstrap": "^5.2.2",
+    "postcss-cli": "^10.0.0"
+  }
+}
