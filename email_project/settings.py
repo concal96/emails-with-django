@@ -21,13 +21,23 @@ STATIC_DIR = os.path.join(BASE_DIR,'static')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
+IS_HEROKU = "DYNO" in os.environ
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-k(48@^cp1+rxaf3+*(9_ygpe8!m2&r83d%d$jba7k27ykx^&z#'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if 'SECRET_KEY' in os.environ:
+    SECRET_KEY = os.environ("SECRET_KEY")
 
-ALLOWED_HOSTS = []
+# SECURITY WARNING: don't run with debug turned on in production!
+
+if IS_HEROKU:
+    ALLOWED_HOSTS = ["*"]
+else:
+    ALLOWED_HOSTS = []
+
+if not IS_HEROKU:
+    DEBUG = True
 
 
 # Application definition
@@ -44,6 +54,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -83,6 +94,15 @@ DATABASES = {
     }
 }
 
+if "DATABASE_URL" in os.environ:
+    # Configure Django for DATABASE_URL environment variable.
+    DATABASES["default"] = dj_database_url.config(
+        conn_max_age=MAX_CONN_AGE, ssl_require=True)
+
+    # Enable test database if found in CI environment.
+    if "CI" in os.environ:
+        DATABASES["default"]["TEST"] = DATABASES["default"]
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -118,11 +138,25 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
+STATIC_ROOT = "/Users/connorcallaghan/Desktop/email_project/static/assets"
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    STATIC_DIR,
-]
-STATIC_ROOT = STATIC_DIR
+
+STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'static'), ]
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+# class HerokuDiscoverRunner(DiscoverRunner):
+#     """Test Runner for Heroku CI, which provides a database for you.
+#     This requires you to set the TEST database (done for you by settings().)"""
+
+#     def setup_databases(self, **kwargs):
+#         self.keepdb = True
+#         return super(HerokuDiscoverRunner, self).setup_databases(**kwargs)
+
+    
+# # Use HerokuDiscoverRunner on Heroku CI
+# if "CI" in os.environ:
+#     TEST_RUNNER = "gettingstarted.settings.HerokuDiscoverRunner"
 
 
 # Default primary key field type
