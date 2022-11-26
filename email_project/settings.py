@@ -36,10 +36,9 @@ if 'SECRET_KEY' in os.environ:
 if IS_HEROKU:
     ALLOWED_HOSTS = ["*"]
 else:
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = ['']
 
-if not IS_HEROKU:
-    DEBUG = True
+DEBUG = False
 
 
 # Application definition
@@ -51,7 +50,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'whitenoise.runserver_nostatic',
     'email_app',
+
 ]
 
 MIDDLEWARE = [
@@ -89,6 +90,8 @@ WSGI_APPLICATION = 'email_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+db_from_env = dj_database_url.config(conn_max_age=600)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -99,6 +102,7 @@ DATABASES = {
         'PORT':5432,
     }
 }
+DATABASES['default'].update(db_from_env)
 
 if "DATABASE_URL" in os.environ:
     # Configure Django for DATABASE_URL environment variable.
